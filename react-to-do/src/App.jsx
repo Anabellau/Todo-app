@@ -9,7 +9,7 @@ const App = () => {
 
   const handleLogin = async (credentials) => {
     try {
-      const response = await fetch('/api/login', {
+      const response = await fetch('http://localhost:4000/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

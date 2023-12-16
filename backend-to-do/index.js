@@ -8,7 +8,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT || 4000;
 const secretKey = process.env.JWT_SECRET || 'your-secret-key'; 
 
 app.use(cors());
@@ -35,6 +35,7 @@ app.post('/api/register', async (req, res) => {
 
   try {
     const existingUser = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+    console.log(existingUser)
     if (existingUser.rows.length > 0) {
       return res.status(400).json({ msg: 'Username is already taken' });
     }
@@ -48,12 +49,14 @@ app.post('/api/register', async (req, res) => {
       res.json({ token });
     });
   } catch (error) {
+    console.log("catch")
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
 app.post('/api/login', async (req, res) => {
+  console.log("entered")
   const { username, password } = req.body;
 
   try {
@@ -63,6 +66,7 @@ app.post('/api/login', async (req, res) => {
     }
 
     const passwordMatch = await bcrypt.compare(password, user.rows[0].password);
+    console.log( password)
     if (!passwordMatch) {
       return res.status(401).json({ msg: 'Invalid credentials' });
     }
